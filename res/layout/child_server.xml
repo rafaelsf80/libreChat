@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/childServerLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:paddingBottom="1dip"
+    android:paddingTop="1dip" >
+
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="10dip"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_centerInParent="true"
+        android:background="@color/serverStatusDisconnected" />
+
+    <ImageView
+        android:id="@+id/imCountry"
+        android:layout_width="30dip"
+        android:layout_height="30dip"
+        android:layout_centerInParent="true"
+        android:layout_toRightOf="@+id/tvStatus"
+        android:paddingLeft="5dip"
+        android:src="@drawable/spain" />
+
+    <TextView
+        android:id="@+id/tvChild"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_toRightOf="@+id/imCountry"
+        android:text="TextView" />
+
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvChild"
+        android:layout_centerInParent="true"
+        android:layout_toLeftOf="@+id/btEditServer" />
+
+    <Button
+        android:id="@+id/btEditServer"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="30dip"
+        android:layout_height="30dip"
+        android:layout_alignParentRight="true"
+        android:layout_centerInParent="true"
+        android:background="@drawable/next"
+        android:focusable="false"
+        android:focusableInTouchMode="false" >
+    </Button>
+
+</RelativeLayout>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content" >
+ 
+ 
+     
+  <TextView
+    android:id="@+id/tvChannelName"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentLeft="true"
+    android:text="Large Text"
+    android:textAppearance="?android:attr/textAppearanceLarge" />
+ 
+  <TextView
+    android:id="@+id/tvChannelTopic"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/tvChannelName"
+    
+    android:text="TextView" />
+  
+   <CheckBox
+        android:id="@+id/cbChannel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerInParent="true"
+        android:layout_marginRight="10dip"
+        android:text="" /> 
+</RelativeLayout>

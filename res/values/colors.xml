@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<color name="textColor">#FFF</color>
+	<color name="textFieldColor">#000</color>
+	<color name="textShadow">#FFF</color>
+	<color name="listViewBg">#DADFEE</color>
+	
+	
+	<color name="backgroung_holo_light">#f0f8ff</color>
+	<color name="backgroung_holo_dark">#000000</color>
+	<color name="backgroung_dark_green">#435320</color>
+	
+	
+	<color name="sendLightColor">#0000ee</color>
+	<color name="sendMeduimColor">#ff00ffff</color>
+	<color name="sendDarkColor">#ff00ffff</color>
+	
+
+	<!-- <color name="barDarkColor">#CECECE</color>
+	<color name="barMeduimColor">#DFDEE0</color>
+	<color name="barLightColor">#F2F2F2</color>
+	515f9f
+	 -->
+	<!-- Red, Yellow, Green -->
+	<color name="serverStatusDisconnected">#FF0000</color> 
+	<color name="serverStatusConnecting">#FFFF00</color>   
+	<color name="serverStatusConnected">#9ACD32</color>
+
+</resources>

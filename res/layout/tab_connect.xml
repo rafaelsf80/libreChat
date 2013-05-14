@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/backgroung_holo_light"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/llStatusMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@color/backgroung_holo_dark">
+        
+        <TextView
+            android:id="@+id/tvStatusMessage"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" 
+            android:textColor="@color/textColor">
+        </TextView>
+
+        <Button
+            android:id="@+id/btCloseStatusMessage"
+            android:layout_width="30dip"
+            android:layout_height="30dip"
+            android:layout_margin="5sp"
+            android:background="@drawable/btn_close_normal" />
+    </LinearLayout>
+
+    <ExpandableListView
+        android:id="@+id/expandableListView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/llStatusMessage"
+        android:scrollbars="none" >
+    </ExpandableListView>
+
+    <LinearLayout
+        android:id="@+id/layoutTabConnectBottom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/backgroung_holo_dark" >
+
+        <Button
+            android:id="@+id/btAddNewServer"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5sp"
+            android:background="@drawable/gotochats_button"
+            android:paddingBottom="5sp"
+            android:paddingLeft="15sp"
+            android:paddingRight="15sp"
+            android:paddingTop="5sp"
+            android:text="@string/tabconnect_btAddNewServer"
+            android:textColor="@color/textColor" />
+    </LinearLayout>
+
+</RelativeLayout>

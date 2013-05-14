@@ -1,0 +1,27 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout01"
+    android:layout_width="fill_parent"
+    android:layout_height="45dip" >
+
+    <ImageView
+        android:id="@+id/ImageView01"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_marginLeft="40dip"
+        android:src="@drawable/icon" >
+    </ImageView>
+
+    <TextView
+        android:id="@+id/tvGroup"
+        android:layout_width="fill_parent"
+        android:layout_height="45dip"
+        android:gravity="center_vertical"
+        android:paddingLeft="5dip"
+        android:paddingRight="5dip"
+        android:text="Children"
+    
+        android:textSize="17dip"
+        android:textStyle="bold" >
+    </TextView>
+
+</LinearLayout>

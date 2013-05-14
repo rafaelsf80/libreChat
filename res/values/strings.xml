@@ -1,0 +1,62 @@
+<resources>
+
+    <string name="app_name">libreChat</string>
+    <string name="chats">Channels</string>
+    
+    <string name="splash_line_1">LibreChat</string>
+    <string name="splash_line_2">An IRC client</string>
+    
+    <string name="tab_title_0">Connect</string>
+    <string name="tab_title_1">Groups</string>
+    <string name="tab_title_2">Options</string>
+    
+    <string name="tabconnect_btAddNewServer">Add New Server</string>
+    <string name="tablist_btGoToChats">Go To Chats</string>
+    
+    <string name="main_empty_list">There is no previous conversations, write new messages below.</string>
+    <string name="chat_btPopupMenu">:</string>
+    <string name="chat_btSend">Send</string>
+    <string name="chat_etUserText_hint">Chat/command</string>
+    
+    <string name="status_channel_downloading">Downloading %1$s of %2$s groups</string>
+    <string name="status_channel_downloaded">Downloaded %1$s of %2$s groups</string>
+    
+    <string name="edit_server_dialog_title_edit_server">Edit server</string>
+    <string name="edit_server_dialog_title_new_server">New server</string>
+    <string name="edit_server_dialog_server_description">Server description</string>
+    <string name="edit_server_dialog_server_description_hint">Any name</string>
+    <string name="edit_server_dialog_server_group">Server group</string>
+    <string name="edit_server_dialog_server_group_hint">Optional</string>
+    <string name="edit_server_dialog_server_ip">IP address</string>
+    <string name="edit_server_dialog_server_ip_hint">a.b.c.d</string>
+    <string name="edit_server_dialog_port_number">Port number</string>
+    <string name="edit_server_dialog_port_number_hint">1 to 65535</string>
+    <string name="edit_server_dialog_nickname">Nickname</string>
+    <string name="edit_server_dialog_nickname_hint">Mandatory</string>
+    <string name="edit_server_dialog_encoding">Encoding</string>
+    <string name="edit_server_dialog_password">Password</string>
+    <string name="edit_server_dialog_password_hint">Optional</string>
+    <string name="edit_server_dialog_connect_on_launch">Connect On Launch</string>
+    <string name="edit_server_dialog_btSave">Save</string>
+    <string name="edit_server_dialog_btCancel">Cancel</string>
+    
+    <string name="edit_server_dialog_cancel_alert_title">Cancel</string>
+    <string name="edit_server_dialog_cancel_alert_string">Cancel without saving ? </string>
+    
+     <string-array name="encoding">
+        <item>US-ASCII</item>
+        <item>UTF-8</item>
+        <item>UTF-16</item>
+        <item>ISO-8859-1</item>
+        <item>ISO-8859-2</item>
+        <item>ISO-8859-16</item>
+        <item>US ASCII</item>
+    </string-array>
+    
+    
+    <string name="chat_popupmenu_btDCC">Send file</string>
+    <string name="chat_popupmenu_btWho">Who</string>
+    <string name="chat_popupmenu_btList">List</string>
+    <string name="chat_popupmenu_btVoice">Voice</string>
+
+</resources>

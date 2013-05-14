@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+    android:id="@+id/main"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#f0f8ff" >
+
+    <LinearLayout
+        android:id="@+id/lladv"
+        android:layout_width="0dip"
+        android:layout_height="0dip"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical" >
+
+        <com.google.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            ads:adSize="BANNER"
+            ads:adUnitId="a14cf3d5920b5c6" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llStatusMessage"
+        android:layout_width="0dip"
+        android:layout_height="0dip"
+        android:layout_below="@+id/lladv"
+        android:background="@color/backgroung_holo_dark" >
+
+        <TextView
+            android:id="@+id/tvStatusMessage"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/textColor" >
+        </TextView>
+
+        <Button
+            android:id="@+id/btCloseStatusMessage"
+            android:layout_width="30dip"
+            android:layout_height="30dip"
+            android:layout_margin="5sp"
+            android:background="@drawable/btn_close_normal" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_above="@+id/layoutBottom"
+        android:layout_below="@+id/llStatusMessage"
+        android:cacheColorHint="#00000000"
+        android:divider="#00000000"
+        android:listSelector="#00000000" >
+    </ListView>
+
+    <TextView
+        android:id="@android:id/empty"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/layoutBottom"
+        android:layout_alignParentTop="true"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="@string/main_empty_list" />
+
+    <LinearLayout
+        android:id="@+id/llPopupMenuParent"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/layoutBottom"
+        android:background="#435320" />
+
+    <LinearLayout
+        android:id="@+id/layoutBottom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/main"
+        android:background="#435320" >
+
+        <Button
+            android:id="@+id/btPopupMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_margin="5sp"
+            android:background="@drawable/send_button"
+            android:paddingBottom="5sp"
+            android:paddingLeft="15sp"
+            android:paddingRight="15sp"
+            android:paddingTop="5sp"
+            android:text="@string/chat_btPopupMenu"
+            android:textColor="@color/textColor" />
+
+        <EditText
+            android:id="@+id/etUserText"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_margin="5sp"
+            android:layout_weight="1"
+            android:background="@drawable/message_field"
+            android:hint="@string/chat_etUserText_hint"
+            android:padding="5sp"
+            android:textColor="@color/textFieldColor" />
+
+        <Button
+            android:id="@+id/btSend"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_margin="5sp"
+            android:background="@drawable/send_button"
+            android:paddingBottom="5sp"
+            android:paddingLeft="15sp"
+            android:paddingRight="15sp"
+            android:paddingTop="5sp"
+            android:text="@string/chat_btSend"
+            android:textColor="@color/textColor" />
+    </LinearLayout>
+
+</RelativeLayout>
