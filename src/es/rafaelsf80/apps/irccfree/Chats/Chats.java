@@ -18,7 +18,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import es.rafaelsf80.apps.irccfree.IRCHelper;
-import es.rafaelsf80.apps.irccfree.MyRunnable;
 import es.rafaelsf80.apps.irccfree.R;
 import es.rafaelsf80.apps.irccfree.Chats.ChatFragment.IChatFragment;
 import es.rafaelsf80.apps.irccfree.Data.MasterArray;
@@ -56,7 +55,6 @@ public class Chats extends FragmentActivity  {
     	{
     	    public void run() 
     	    {
-    	        Log.d(TAG, "Hello World");
     	        handler.postDelayed(this, IRCHelper.TIME_BETWEEN_ADS);
     	        
     	        int index = mViewPager.getCurrentItem();

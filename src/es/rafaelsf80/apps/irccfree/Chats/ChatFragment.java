@@ -1,9 +1,10 @@
 package es.rafaelsf80.apps.irccfree.Chats;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ListFragment;
@@ -29,6 +30,7 @@ import es.rafaelsf80.apps.irccfree.IRCHelper;
 import es.rafaelsf80.apps.irccfree.MyRunnable;
 import es.rafaelsf80.apps.irccfree.R;
 import es.rafaelsf80.apps.irccfree.Data.Channel;
+import es.rafaelsf80.apps.irccfree.Data.DCC;
 import es.rafaelsf80.apps.irccfree.Data.MasterArray;
 import es.rafaelsf80.apps.irccfree.Data.MyMessage;
 import es.rafaelsf80.apps.irccfree.Data.Server;
@@ -39,15 +41,13 @@ public class ChatFragment extends ListFragment {
 
 	private final String TAG = getClass().getSimpleName();
 	public static final String ARG_OBJECT = "object";
-
-    private static ArrayList<MyMessage> mMessages;
     
     private LinearLayout llStatusMessage;
 	private TextView tvStatusMessage;
     private Button btCloseStatusMessage;
     
-    Button btSend, btPopupMenu, btDCCSend, btWho;
-    LinearLayout llPopupMenuParent, llPopupMenu;
+    Button btSend, btPopupMenu, btDCCSend, btWho, btList, btVoice;
+    LinearLayout llPopupMenu;
     Server server;
     Integer key1;
     BubbleAdapter adapter;
@@ -108,17 +108,20 @@ public class ChatFragment extends ListFragment {
 		Bundle args = getArguments();
         final EditText etUserText = (EditText) rootView.findViewById(R.id.etUserText);
         btSend = (Button) rootView.findViewById(R.id.btSend);
-        llPopupMenuParent = (LinearLayout) rootView.findViewById(R.id.llPopupMenuParent);
+        llPopupMenu = (LinearLayout) rootView.findViewById(R.id.llPopupMenu);
+        llPopupMenu.setVisibility(View.GONE);
         
         btDCCSend = (Button) rootView.findViewById(R.id.btDCCSendFile);
         btWho = (Button) rootView.findViewById(R.id.btWho);
+        btList = (Button) rootView.findViewById(R.id.btList);
+        btVoice = (Button) rootView.findViewById(R.id.btVoice);
         btPopupMenu = (Button) rootView.findViewById(R.id.btPopupMenu);
         server = args.getParcelable(IRCHelper.SERVER); 
         key1 = args.getInt(IRCHelper.KEY);
         server = MasterArray.findServerByKey(key1);
         
-    	SparseArray<Channel> ch = server.getChannelArray();
-		mMessages = ch.get(key1).getMessageArray();
+    	//SparseArray<Channel> ch = server.getChannelArray();
+		//mMessages = ch.get(key1).getMessageArray();
 		
 		adapter = new BubbleAdapter(getActivity(), server, key1);
         setListAdapter(adapter);
@@ -157,35 +160,56 @@ public class ChatFragment extends ListFragment {
         	@Override
         	public void onClick(View v) {
 
-        		final View child = inflater1.inflate(R.layout.chat_popupmenu, container1, false);
-        		llPopupMenuParent.addView(child);
+//        		final View child = inflater1.inflate(R.layout.chat_popupmenu, container1, false);
+//        		llPopupMenuParent.addView(child);
 
 
-        		btDCCSend = (Button) child.findViewById(R.id.btDCCSendFile);
-        		btWho = (Button) child.findViewById(R.id.btWho);
+        		btDCCSend = (Button) rootView.findViewById(R.id.btDCCSendFile);
+        		btWho = (Button) rootView.findViewById(R.id.btWho);
 
         		btDCCSend.setOnClickListener(new OnClickListener() {
 
         			@Override
         			public void onClick(View v) {
-
-
-
-        				llPopupMenuParent.removeView(child);
-
+        				llPopupMenu.setVisibility(View.GONE);
+        				//llPopupMenuParent.removeView(child);
         			}
         		});
         		btWho.setOnClickListener(new OnClickListener() {
 
         			@Override
         			public void onClick(View v) {
-        				llPopupMenuParent.removeView(child);
-
+        				llPopupMenu.setVisibility(View.GONE);
+        				ConnectionService.sendIRCCommand(server, "/WHO");
+        				//llPopupMenuParent.removeView(child);
         			}
         		});
+        		btList.setOnClickListener(new OnClickListener() {
+
+        			@Override
+        			public void onClick(View v) {
+        				llPopupMenu.setVisibility(View.GONE);
+        				ConnectionService.sendIRCCommand(server, "/LIST");
+        				//llPopupMenuParent.removeView(child);
+        			}
+        		});
+        		btVoice.setOnClickListener(new OnClickListener() {
+
+        			@Override
+        			public void onClick(View v) {
+        				llPopupMenu.setVisibility(View.GONE);
+        				//llPopupMenuParent.removeView(child);
+        			}
+        		});
+
+
+        		
         	
+        	if (llPopupMenu.getVisibility() != View.VISIBLE) 
+        		llPopupMenu.setVisibility(View.VISIBLE);
+        	else 
+        		llPopupMenu.setVisibility(View.GONE);
         	
-        	//llPopupMenu.setVisibility(View.VISIBLE);
 //				if (mIService != null) {
 //	        		
 //	        		mIService.itemClick(server);
@@ -212,9 +236,12 @@ public class ChatFragment extends ListFragment {
     					//server.sync
     					String channelName = MasterArray.findChannelNameByKey(key1);
     					String userInput = ((EditText) v).getText().toString();
-    					if (userInput.startsWith("/"))
-    						ConnectionService.sendIRCCommand(server, userInput); 						
-    					else
+    					if (userInput.startsWith("/")) {
+    						/* Only "/WHO" and "/LIST" are allowed for the time being */
+    						/* TODO: To implement "/QUIT", the fragment should be removed to avoid NullPointerException */
+    						if (((userInput.toUpperCase()).contains("WHO")) || ((userInput.toUpperCase()).contains("LIST"))) 
+    							ConnectionService.sendIRCCommand(server, userInput); 						
+    					} else
     						ConnectionService.sendIRCChat(server, channelName, userInput);
     					etUserText.getEditableText().clear(); 
     				} 
@@ -227,8 +254,7 @@ public class ChatFragment extends ListFragment {
     }
     
     public String getPageTitle() {
-    	return (server.getChannelArray()).get(key1).getName(); 
-    	
+    	return (server.getChannelArray()).get(key1).getName();  	
     }
     
     public void showAd() {
@@ -253,8 +279,7 @@ public class ChatFragment extends ListFragment {
 
     			} 
     		}, IRCHelper.TIMER_ACTIVE_AD);
-    	}
-    	
+    	}	
     }
     
     
@@ -292,29 +317,31 @@ public class ChatFragment extends ListFragment {
     		}	
     	}
     	
-    
-			
     	
-//    	if (server.isDccOfferReceived()) {
-//    		
-//    		new AlertDialog.Builder(getActivity())
-//    	    .setTitle("DCC Download")
-//    	    .setMessage("Are you sure you want to download " + server.getDccFileName() + " ?")
-//    	    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//    	        public void onClick(DialogInterface dialog, int which) { 
-//    	        	DownloadFileTask task = new DownloadFileTask( );
-//    				task.setContext( getActivity() );
-//    				task.execute( new String[]{server.getDccIp(), String.valueOf(server.getDccPort()), server.getDccFileName(), String.valueOf(server.getDccFileSize())} );
-//    				server.setDccOfferReceived(false);
-//    	        }
-//    	     })
-//    	    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-//    	        public void onClick(DialogInterface dialog, int which) { 
-//    	            // do nothing
-//    	        }
-//    	     })
-//    	     .show();
-// 		}
+    	if (server.isDccOfferReceived()) {
+    		
+    		final DCC dcc = server.getDcc();
+    		
+    		new AlertDialog.Builder(getActivity())
+    	    .setTitle("DCC Download")
+    	    .setMessage("Are you sure you want to download " + dcc.getFileName() + " ?")
+    	    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+    	        public void onClick(DialogInterface dialog, int which) { 
+    	        	DownloadFileTask task = new DownloadFileTask( );
+    				task.setContext( getActivity() );
+    				task.execute( new String[]{dcc.getIp(), String.valueOf(dcc.getPort()), dcc.getFileName(), String.valueOf(dcc.getFileSize())} );
+    				server.setDccOfferReceived(false);
+    	        }
+    	     })
+    	    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+    	        public void onClick(DialogInterface dialog, int which) { 
+    	            // do nothing
+    	        }
+    	     })
+    	     .show();
+    		
+    		server.setDccOfferReceived(false);
+ 		}
 
 
     }

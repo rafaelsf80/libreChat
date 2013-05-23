@@ -497,9 +497,9 @@ public class MasterArray {
 
    	 Server server7 = new Server();
    	server7.setConnectOnLaunch(false);
-   	 server7.setName("ngircd 0.17");
-   	 server7.setGroup("ngircd");
-   	 server7.setIp("192.168.1.26");
+   	 server7.setName("ngIRCd 0.17");
+   	 server7.setGroup("ngIRCd");
+   	 server7.setIp("192.168.1.10");
    	 server7.setPort(7101);
    	 server7.setNickname("Yolanda");
    	SparseArray<Channel> ch7 = new SparseArray<Channel>();

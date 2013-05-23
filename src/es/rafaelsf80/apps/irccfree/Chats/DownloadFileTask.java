@@ -85,16 +85,10 @@ public class DownloadFileTask extends AsyncTask<String, Integer, Integer>{
 	private String downloadFile (String ip, String port, String fileName, String fileSize, final String directory) throws IOException
 	{				
 		Log.d("downloadFile", "downloadFile(), " + directory);
+		
+		// Shows a typical 0-100% progress bar
 		publishProgress(0);
 
-		
-
-		// This will be useful so that you can show a typical 0-100% progress bar
-		
-	
-			
-		
-		
 		Socket connection = new Socket(ip, Integer.parseInt(port));
 		
 		final int fileLength = Integer.parseInt(fileSize);
@@ -140,6 +134,5 @@ public class DownloadFileTask extends AsyncTask<String, Integer, Integer>{
 		Log.d(TAG, "Finished download on: " + destination.toString());
 
 		return destination.toString();
-
 	}
 }

@@ -60,9 +60,9 @@ public class TabList extends Fragment {
 				else {
 					AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 							getActivity());
-					alertDialogBuilder.setTitle("ERROR");
+					alertDialogBuilder.setTitle(R.string.tab_list_error_join_first_title);
 					alertDialogBuilder
-					.setMessage("Please, join a channel first")
+					.setMessage(R.string.tab_list_error_join_first)
 					.setCancelable(false)
 					.setPositiveButton("OK",new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog,int id) {
@@ -73,8 +73,6 @@ public class TabList extends Fragment {
 					AlertDialog alertDialog = alertDialogBuilder.create();
 					alertDialog.show();
 				}
-
-
 			}
 		});   
 		return rootView;

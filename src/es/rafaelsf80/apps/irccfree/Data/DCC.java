@@ -10,63 +10,55 @@ public class DCC implements Parcelable {
     private int dccFileSize;
     private String dccFileName;
     
+	public DCC () {
+		this.dccIp = "";
+		this.dccFileSize = 0;
+		this.dccPort = 0;
+		this.dccFileName = "";
+	}
+    
     public DCC(Parcel in) {
 		readFromParcel(in);
 	}
 
-    
-    public String getDccIp() {
+    public String getIp() {
 		return dccIp;
 	}
 
-	public void setDccIp(String dccIp) {
+	public void setIp(String dccIp) {
 		this.dccIp = dccIp;
 	}
 
-
-
-	public int getDccPort() {
+	public int getPort() {
 		return dccPort;
 	}
 
-
-
-	public void setDccPort(int dccPort) {
+	public void setPort(int dccPort) {
 		this.dccPort = dccPort;
 	}
 
-
-
-	public int getDccFileSize() {
+	public int getFileSize() {
 		return dccFileSize;
 	}
 
-
-
-	public void setDccFileSize(int dccFileSize) {
+	public void setFileSize(int dccFileSize) {
 		this.dccFileSize = dccFileSize;
 	}
 
-
-
-	public String getDccFileName() {
+	public String getFileName() {
 		return dccFileName;
 	}
 
-
-
-	public void setDccFileName(String dccFileName) {
+	public void setFileName(String dccFileName) {
 		this.dccFileName = dccFileName;
 	}
-
-
 
 	@Override
 	public int describeContents() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-    
+   
 
     @Override
 	public void writeToParcel(Parcel dest, int flags) {

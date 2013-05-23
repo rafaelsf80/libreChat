@@ -1,18 +1,6 @@
 package es.rafaelsf80.apps.irccfree.TabConnect;
 
-import java.util.ArrayList;
-
-import es.rafaelsf80.apps.irccfree.MyRunnable;
-import es.rafaelsf80.apps.irccfree.R;
-import es.rafaelsf80.apps.irccfree.Data.MasterArray;
-import es.rafaelsf80.apps.irccfree.Data.Server;
-import es.rafaelsf80.apps.irccfree.R.color;
-import es.rafaelsf80.apps.irccfree.R.id;
-import es.rafaelsf80.apps.irccfree.R.layout;
-import es.rafaelsf80.apps.irccfree.Service.ConnectionService;
-
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,10 +9,13 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import es.rafaelsf80.apps.irccfree.MyRunnable;
+import es.rafaelsf80.apps.irccfree.R;
+import es.rafaelsf80.apps.irccfree.Data.MasterArray;
+import es.rafaelsf80.apps.irccfree.Data.Server;
+import es.rafaelsf80.apps.irccfree.Service.ConnectionService;
 
 public class TabConnectAdapter extends BaseExpandableListAdapter {
 

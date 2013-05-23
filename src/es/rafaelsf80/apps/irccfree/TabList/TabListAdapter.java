@@ -1,9 +1,9 @@
 package es.rafaelsf80.apps.irccfree.TabList;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -129,7 +129,9 @@ public class TabListAdapter extends BaseAdapter
 												Log.d(TAG, "onClickd() " + server.getChannelArray().get(key).getName()  + " to true");
 											} else  {
 												Log.d(TAG, "Not possible to join in server: " + String.valueOf(server.getStatus()) + " " + server);
-												Toast.makeText(mContext, "Error joining "+server.getChannelArray().get(key).getName(), Toast.LENGTH_SHORT).show();
+												Toast.makeText(mContext, 
+														String.format( ((Activity) mContext).getResources().getString(R.string.tab_list_error_joining, server.getChannelArray().get(key).getName())), 
+														Toast.LENGTH_SHORT).show();
 											}
 															
 										} 
@@ -153,7 +155,9 @@ public class TabListAdapter extends BaseAdapter
 											}
 											else  {
 												Log.d(TAG, "Not possible to leave");
-												Toast.makeText(mContext, "Error leaving "+server.getChannelArray().get(key).getName(), Toast.LENGTH_SHORT).show();
+												Toast.makeText(mContext, 
+														String.format( ((Activity) mContext).getResources().getString(R.string.tab_list_error_leaving, server.getChannelArray().get(key).getName())), 
+														Toast.LENGTH_SHORT).show();
 											}						
 										} 
 									} ,1000);

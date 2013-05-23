@@ -24,8 +24,8 @@
         android:shadowColor="#0000ee"
         android:shadowRadius="15.0"
         android:text="@string/splash_line_2"
-        android:textColor="#00ffff"
-        android:textSize="14pt"
+        android:textColor="#0000ff"
+        android:textSize="10pt"
         android:textStyle="bold"
         android:typeface="sans" />
 

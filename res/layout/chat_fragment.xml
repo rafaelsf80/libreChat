@@ -63,20 +63,14 @@
         android:layout_alignParentTop="true"
         android:gravity="center_vertical|center_horizontal"
         android:text="@string/main_empty_list" />
-
-    <LinearLayout
-        android:id="@+id/llPopupMenuParent"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/layoutBottom"
-        android:background="#435320" />
-
+    
+    <include layout="@layout/chat_popupmenu"/>
+  
     <LinearLayout
         android:id="@+id/layoutBottom"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_below="@+id/main"
         android:background="#435320" >
 
         <Button

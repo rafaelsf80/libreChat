@@ -8,6 +8,7 @@
 	
 	
 	<color name="backgroung_holo_light">#f0f8ff</color>
+	<color name="backgroung_holo_light_2">#f0f8dd</color>
 	<color name="backgroung_holo_dark">#000000</color>
 	<color name="backgroung_dark_green">#435320</color>
 	

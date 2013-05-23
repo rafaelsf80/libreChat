@@ -5,10 +5,10 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,9 +16,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.util.SparseArray;
+import es.rafaelsf80.apps.irccfree.IRCHelper;
 import es.rafaelsf80.apps.irccfree.IRCParser;
 import es.rafaelsf80.apps.irccfree.R;
 import es.rafaelsf80.apps.irccfree.Data.Channel;
+import es.rafaelsf80.apps.irccfree.Data.DCC;
 import es.rafaelsf80.apps.irccfree.Data.MasterArray;
 import es.rafaelsf80.apps.irccfree.Data.MyMessage;
 import es.rafaelsf80.apps.irccfree.Data.Server;
@@ -270,34 +272,35 @@ public class ConnectionThread extends Thread {
 		*/
 		if (ircMessage.contains("DCC") == true) {
 			Log.i(TAG, "DCC received");
+			DCC dcc = new DCC();
 			
 			index = ircMessage.indexOf("DCC SEND ");
 			Log.i(TAG, "index: "+String.valueOf(index));
 			String channel [] = (ircMessage.substring(index+9)).split(" ");
-//			
-//			server.setDccFileName(  channel[0].replaceAll("(\r|\n)", "") );
-//			
-//			long ip = Long.parseLong(channel[1]);
-//			try {
-//				server.setDccIp( InetAddress.getByAddress(IRCHelper.unpackIpAdress(ip)).getHostAddress() );
-//			} catch (UnknownHostException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			} 
-//			
-//			String portString = channel[2].replaceAll("(\r|\n)", "");
-//			server.setDccPort( Integer.parseInt(portString.replaceAll("((|))", "")) );
-//			
-//			String fileSizeString = channel[3].replaceAll("(\r|\n)", "");
-//			server.setDccFileSize( Integer.parseInt(fileSizeString.replaceAll("[\u0000-\u001f]", "")) ); /* remove non-numeric characters */
-//			
-//			/* DCC received: amStudio.cfg 192.168.1.17 1024 4520 */
-//			Log.i(TAG, "DCC received: " + server.getDccFileName() + " " + server.getDccIp() + " "+String.valueOf(server.getDccPort()) + " "+ String.valueOf(server.getDccFileSize()));
-//			
-//			
-//			server.setNotification( IRCHelper.DCC_RECEIVED);
-//			server.setDccOfferReceived( true );
-//				
+			
+			dcc.setFileName(  channel[0].replaceAll("(\r|\n)", "") );
+			
+			long ip = Long.parseLong(channel[1]);
+			try {
+				dcc.setIp( InetAddress.getByAddress(IRCParser.unpackIpAdress(ip)).getHostAddress() );
+			} catch (UnknownHostException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} 
+			
+			String portString = channel[2].replaceAll("(\r|\n)", "");
+			dcc.setPort( Integer.parseInt(portString.replaceAll("((|))", "")) );
+			
+			String fileSizeString = channel[3].replaceAll("(\r|\n)", "");
+			dcc.setFileSize( Integer.parseInt(fileSizeString.replaceAll("[\u0000-\u001f]", "")) ); /* remove non-numeric characters */
+					
+			/* DCC received: amStudio.cfg 192.168.1.17 1024 4520 */
+			Log.i(TAG, "DCC received: " + dcc.getFileName() + " " + dcc.getIp() + " "+String.valueOf(server.getPort()) + " "+ String.valueOf(dcc.getFileSize()));
+
+			server.setNotification( IRCHelper.DCC_RECEIVED );
+			server.setDcc(dcc);
+			server.setDccOfferReceived( true );
+				
 		}
 	
 	
@@ -336,7 +339,7 @@ public class ConnectionThread extends Thread {
 			Log.i(TAG, "topic --> " + topic);
 			Log.i(TAG, "users --> " + users);
 			
-			textToShow = "* Joined to channel topic " + topic + ".<br>* Users on channel: " + users; 
+			textToShow = "Joined to channel " + topic + "\nUsers on channel: " + users; 
 			
 			
 			if (server.getStatus() == Server.JOIN_SENT) {
@@ -350,15 +353,8 @@ public class ConnectionThread extends Thread {
 		   :group101.ro2.uc3m.irc.net 315 Yolanda * :End of WHO list*/
 		/* RPL_WHOREPLAY 352  "<channel> <user> <host> <server> <nick>  <H|G>[*][@|+] :<hopcount> <real name>" */
 		if (ircParser.isWhoReply()) {  	
-			String [] tokens = ircMessage.split("[\\n]");		
-			for (int i = 0; i < tokens.length; i++) {
-				/* remove \r|\n */
-				tokens[i] = tokens[i].replaceAll("(\r|\n)", "");
-				if ((index = tokens[i].indexOf("352")) > 0)  // Find RPL_TOPIC 352
-					name = tokens[i].substring(index+7 + server.getNickname().length());
-			}
 		
-			textToShow = "* " + name;
+			textToShow = "WHO: " + ircParser.getWho();
 			if (server.getStatus() == Server.WHO_SENT)
 				server.setStatus( Server.JOINED );
 		}
@@ -380,12 +376,9 @@ public class ConnectionThread extends Thread {
 				ircMessageBuffer = ircMessageBuffer + ircMessage;
 				tokens = ircMessageBuffer.split("[\\n]");	
 				server.setStatusMessage( String.format( ((Activity) mContext).getResources().getString(R.string.status_channel_downloading), 
-						String.valueOf(tokens.length), 
-						server.getTotalChannels()));  
-						
+						String.valueOf(tokens.length)));  					
 			} else {
 				server.setStatusMessage( String.format( ((Activity) mContext).getResources().getString(R.string.status_channel_downloaded), 
-						server.getTotalChannels(), 
 						server.getTotalChannels())); 
 
 				ircMessageBuffer = ircMessageBuffer + ircMessage; /* add last lines */
@@ -407,8 +400,7 @@ public class ConnectionThread extends Thread {
 				}
 				
 				server.setStatusMessage( String.format( ((Activity) mContext).getResources().getString(R.string.status_channel_downloaded), 
-						String.valueOf(ch_new.size()), 
-						server.getTotalChannels())); 
+						String.valueOf(ch_new.size()))); 
 			}
 
 			/* Split multiline response: \\n is end of message */

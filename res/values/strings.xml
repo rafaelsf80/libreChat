@@ -4,11 +4,12 @@
     <string name="chats">Channels</string>
     
     <string name="splash_line_1">LibreChat</string>
-    <string name="splash_line_2">An IRC client</string>
+    <string name="splash_line_2">An IRC-based chat client</string>
     
     <string name="tab_title_0">Connect</string>
     <string name="tab_title_1">Groups</string>
     <string name="tab_title_2">Options</string>
+    <string name="tab_text_2">Options-Future</string>
     
     <string name="tabconnect_btAddNewServer">Add New Server</string>
     <string name="tablist_btGoToChats">Go To Chats</string>
@@ -18,8 +19,13 @@
     <string name="chat_btSend">Send</string>
     <string name="chat_etUserText_hint">Chat/command</string>
     
-    <string name="status_channel_downloading">Downloading %1$s of %2$s groups</string>
-    <string name="status_channel_downloaded">Downloaded %1$s of %2$s groups</string>
+    <string name="status_channel_downloading">Downloading groups (%1$s) </string>
+    <string name="status_channel_downloaded">Downloaded %1$s groups</string>
+    
+    <string name="tab_list_error_join_first_title">ERROR</string>
+    <string name="tab_list_error_join_first">Please, join a channel first</string>
+    <string name="tab_list_error_joining">Error joining %1$s</string>
+    <string name="tab_list_error_leaving">Error leaving %1$s</string>
     
     <string name="edit_server_dialog_title_edit_server">Edit server</string>
     <string name="edit_server_dialog_title_new_server">New server</string>
@@ -44,13 +50,12 @@
     <string name="edit_server_dialog_cancel_alert_string">Cancel without saving ? </string>
     
      <string-array name="encoding">
-        <item>US-ASCII</item>
-        <item>UTF-8</item>
-        <item>UTF-16</item>
-        <item>ISO-8859-1</item>
-        <item>ISO-8859-2</item>
-        <item>ISO-8859-16</item>
         <item>US ASCII</item>
+        <item>UTF 8</item>
+        <item>UTF 16</item>
+        <item>ISO 8859 1</item>
+        <item>ISO 8859 2</item>
+        <item>ISO 8859 16</item>
     </string-array>
     
     

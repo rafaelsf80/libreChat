@@ -38,6 +38,8 @@ public class Server implements Parcelable {
 	private String password;
 	private String encoding;
 	private SparseArray<Channel> channelArray;
+	private boolean isDccOfferReceived;
+	private DCC dcc;
 	private int status;
 	private String StatusMessage; 
 
@@ -223,6 +225,22 @@ public class Server implements Parcelable {
 
 	public void setChannelArray(SparseArray<Channel> channelArray) {
 		this.channelArray = channelArray;
+	}
+
+	public boolean isDccOfferReceived() {
+		return isDccOfferReceived;
+	}
+
+	public void setDccOfferReceived(boolean isDccOfferReceived) {
+		this.isDccOfferReceived = isDccOfferReceived;
+	}
+
+	public DCC getDcc() {
+		return dcc;
+	}
+
+	public void setDcc(DCC dcc) {
+		this.dcc = dcc;
 	}
 
 	public String getTotalChannels() {

@@ -11,16 +11,17 @@
     android:layout_height="wrap_content"
     android:layout_alignParentTop="true"
     android:layout_alignParentLeft="true"
-    android:text="Large Text"
+    
     android:textAppearance="?android:attr/textAppearanceLarge" />
  
   <TextView
     android:id="@+id/tvChannelTopic"
-    android:layout_width="wrap_content"
+    android:layout_width="275dip"
     android:layout_height="wrap_content"
+    android:maxLines="3"
     android:layout_below="@+id/tvChannelName"
     
-    android:text="TextView" />
+    />
   
    <CheckBox
         android:id="@+id/cbChannel"
