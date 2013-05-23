@@ -5,6 +5,14 @@
     android:gravity="center"
     android:orientation="vertical" >
 
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="100dip"
+        android:layout_height="100dip"
+        android:layout_marginLeft="3dip"
+        android:scaleType="center"
+        android:src="@drawable/ic_librechat" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -134,9 +134,6 @@ public class ConnectionThread extends Thread {
 								
 								processReceivedMessage(rec);
 								
-								
-									
-								
 								/* Callback only if IRC message is not partially received */								
 //									if ((server.getStatus() == Server.AUTHENTICATED) ||
 //											(server.getStatus() == Server.JOINED) ||
@@ -176,7 +173,6 @@ public class ConnectionThread extends Thread {
 					loop = false;
 				}
 		}
-	
 	}
 	
 	
@@ -212,7 +208,7 @@ public class ConnectionThread extends Thread {
 				textToShow += ircMessage.substring(index + name.length() + 2);
 				textToShow = textToShow.replaceAll("(\r|\n)", "");
 				Log.i(TAG, "chat --> " + ircMessage.substring(index + name.length() + 2));
-				server.setNotification( MasterArray.findKeyByChannelName(server, name));
+				server.setNotification( MasterArray.findKeyByChannelName(server, name) );
 				isVisible = true;
 			}
 		
@@ -232,7 +228,6 @@ public class ConnectionThread extends Thread {
 			 :morgan.freenode.net 265 yonaru 3584 8343 :Current local users 3584, max 8343
 			 :morgan.freenode.net 266 yonaru 85776 88680 :Current global users 85776, max 88680
 			 :morgan.freenode.net 250 yonaru :Highest connection count: 8344 (8343 clients) (451219 connections received)
-			 :morgan.freenode.net 375 yonaru :- morgan.freenode.net Message of the Day - 
 			 :morgan.freenode.net 372 yonaru :- Welcome to morgan.freenode.net in Chicago, IL, USA! Thank
 			 :morgan.freenode.net 372 yonaru :- you to psyprus for sponsoring this server!
 			 :morgan.freenode.net 372 yonaru :-  
@@ -270,7 +265,7 @@ public class ConnectionThread extends Thread {
 			:Rafa!~rafaelsf@192.168.1.10 NOTICE eralsaz :DCC Send fileName.exe (192.168.1.10)
 			:Rafa!~rafaelsf@192.168.1.10 PRIVMSG eralsaz :<CTRL+A>DCC SEND fileName.exe 3232235786 1024 1234808<CTRL+A>
 		*/
-		if (ircMessage.contains("DCC") == true) {
+		if (ircMessage.contains("DCC ") == true) {
 			Log.i(TAG, "DCC received");
 			DCC dcc = new DCC();
 			
@@ -297,7 +292,7 @@ public class ConnectionThread extends Thread {
 			/* DCC received: amStudio.cfg 192.168.1.17 1024 4520 */
 			Log.i(TAG, "DCC received: " + dcc.getFileName() + " " + dcc.getIp() + " "+String.valueOf(server.getPort()) + " "+ String.valueOf(dcc.getFileSize()));
 
-			server.setNotification( IRCHelper.DCC_RECEIVED );
+			server.setNotification( 0 );
 			server.setDcc(dcc);
 			server.setDccOfferReceived( true );
 				
@@ -339,7 +334,10 @@ public class ConnectionThread extends Thread {
 			Log.i(TAG, "topic --> " + topic);
 			Log.i(TAG, "users --> " + users);
 			
-			textToShow = "Joined to channel " + topic + "\nUsers on channel: " + users; 
+			textToShow = ((Activity) mContext).getResources().getString(R.string.status_joined_to_channel)
+					+ ": " + topic + "\n" + 
+					((Activity) mContext).getResources().getString(R.string.status_users_on_channel)
+					+ ": " + users; 
 			
 			
 			if (server.getStatus() == Server.JOIN_SENT) {
@@ -354,7 +352,7 @@ public class ConnectionThread extends Thread {
 		/* RPL_WHOREPLAY 352  "<channel> <user> <host> <server> <nick>  <H|G>[*][@|+] :<hopcount> <real name>" */
 		if (ircParser.isWhoReply()) {  	
 		
-			textToShow = "WHO: " + ircParser.getWho();
+			textToShow = ((Activity) mContext).getResources().getString(R.string.status_users_on_channel) + ": " + ircParser.getWho(server.getNickname());
 			if (server.getStatus() == Server.WHO_SENT)
 				server.setStatus( Server.JOINED );
 		}
@@ -452,7 +450,7 @@ public class ConnectionThread extends Thread {
 		    			  if (key != -1) {
 		    			 ArrayList<MyMessage> messages = ch.get(key).getMessageArray();
 		    			
-		    				messages.add(new MyMessage(textToShow1, false, false, false)); /* true -> message is mine */
+		    				messages.add(new MyMessage(textToShow1, false, false)); /* true -> message is mine */
 		    			  }
 		    			  /* Show publicity each 4 messages */
 		    			  

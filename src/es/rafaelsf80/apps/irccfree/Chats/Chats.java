@@ -24,6 +24,8 @@ import es.rafaelsf80.apps.irccfree.Data.MasterArray;
 import es.rafaelsf80.apps.irccfree.Data.Server;
 import es.rafaelsf80.apps.irccfree.Service.ConnectionService;
 import es.rafaelsf80.apps.irccfree.Service.ConnectionService.IConnectionService;
+import es.rafaelsf80.apps.irccfree.TabConnect.TabConnect;
+import es.rafaelsf80.apps.irccfree.TabConnect.TabConnectAdapter;
 
 public class Chats extends FragmentActivity  {
 	
@@ -48,6 +50,7 @@ public class Chats extends FragmentActivity  {
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
     	setContentView(R.layout.chats);
+    	Log.d(TAG, "onCreate()");
     	
     	/* Show advertisements every 20 seconds */
     	final Handler handler = new Handler();
@@ -67,53 +70,17 @@ public class Chats extends FragmentActivity  {
     	};
     	handler.postDelayed(r, IRCHelper.TIME_BETWEEN_ADS);
     	
-
-    	ConnectionService.regListener(new IConnectionService() {
-
-    		@Override
-    		public void updateUI() {
-    			// TODO Auto-generated method stub
-
-    			int index = mViewPager.getCurrentItem();
-    			Fragment fragment = mChatPagerAdapter.getFragment(index);
-    			Log.d(TAG, "UI update on Fragment #" + index);
-
-    			if (fragment != null) {
-    				((ChatFragment) fragment).adapter.notifyDataSetChanged();
-    				((ChatFragment) fragment).updateUI();
-    			}
-    		}
-    		
-    		
-
-    		@Override
-    		public void updateColors() {
-    			// TODO Auto-generated method stub
-
-    		}
-    	});
-		
-    	ChatFragment.regListener(new IChatFragment() {
-    		@Override
-    		public void itemClick(Server server) {
-
-    			Bundle args;
-    			FragmentManager fm = getSupportFragmentManager();
-    	        ChatPopupMenu editNameDialog = new ChatPopupMenu();
-    	        args = new Bundle();
-    	        args.putParcelable("SERVER", server);
-                editNameDialog.setArguments(args);
-    	        editNameDialog.show(fm, "fragment_edit_name");
-    		}
-    	});
-    	
-    	
-    	
+  	
     	int key = -1;
+    	boolean is_dcc = false;
     	Intent intent = getIntent();
         
-        if (intent != null) 
-        	 key = intent.getIntExtra(IRCHelper.NOTIFICATION_FRAGMENT_KEY, -1);
+        if (intent != null) {
+        	key = intent.getIntExtra(IRCHelper.NOTIFICATION_CHANNEL_KEY, -1);
+			is_dcc = intent.getBooleanExtra(IRCHelper.NOTIFICATION_IS_DCC, false);
+        	
+        }
+        	 
 
         // Create an adapter that when requested, will return a fragment representing an object in
         // the collection.
@@ -135,11 +102,64 @@ public class Chats extends FragmentActivity  {
         mViewPager.setAdapter(mChatPagerAdapter);
         
         /* No need to notify DCC since it should be enabled on server.isDccReceived */
-        if (key != -1)      
-        	mChatPagerAdapter.getItem( MasterArray.KeyToPosition(key) );
+        if (key != -1)    
+        	mViewPager.setCurrentItem( MasterArray.keyToPosition(key) );
         	
         //Toast.makeText(this, "Parcelable " + server.getName() + " " + server.getIp() + " Buffer: " + server.getBuffer(), Toast.LENGTH_LONG).show();
     }
+    
+    @Override
+    protected void onResume() {
+    	super.onResume();
+		Log.d(TAG, "onResume()");
+    	
+    	ConnectionService.regListener(new IConnectionService() {
+
+    		@Override
+    		public void updateUI() {
+    			// TODO Auto-generated method stub
+
+    			int index = mViewPager.getCurrentItem();
+    			Fragment fragment = mChatPagerAdapter.getFragment(index);
+    			Log.d(TAG, "UI update on Fragment #" + index);
+
+    			if (fragment != null) {
+    				((ChatFragment) fragment).adapter.notifyDataSetChanged();
+    				((ChatFragment) fragment).updateUI();
+    			}
+    		}
+  
+    		@Override
+    		public void updateColors() {
+    			// TODO Auto-generated method stub
+
+    		}
+    	});
+		
+    	ChatFragment.regListener(new IChatFragment() {
+    		@Override
+    		public void itemClick(Server server) {
+
+    			Bundle args;
+    			FragmentManager fm = getSupportFragmentManager();
+    	        ChatPopupMenu editNameDialog = new ChatPopupMenu();
+    	        args = new Bundle();
+    	        args.putParcelable("SERVER", server);
+                editNameDialog.setArguments(args);
+    	        editNameDialog.show(fm, "fragment_edit_name");
+    		}
+    	});
+    }
+    
+    @Override
+	protected void onPause() {
+
+		super.onPause();
+		Log.d(TAG, "onPause()");
+
+		ChatFragment.unregisterListener();
+		ConnectionService.unregisterListener();
+	}
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -183,13 +203,12 @@ public class Chats extends FragmentActivity  {
 
         @Override
         public Fragment getItem(int i) {
-        	
-        	
+         	
             Fragment fragment = new ChatFragment();
             
             Bundle args = new Bundle();
             
-            Log.d("Chats", "getItem() #" + i + " " + MasterArray.findJoinedChannelNameByPosition(i));
+            //Log.d("Chats", "getItem() #" + i + " " + MasterArray.findJoinedChannelNameByPosition(i));
             args.putParcelable(IRCHelper.SERVER, MasterArray.findServerByKey(i));
             args.putInt(IRCHelper.KEY, MasterArray.positionToKey(i));
             fragment.setArguments(args);
@@ -200,7 +219,7 @@ public class Chats extends FragmentActivity  {
 
         @Override
         public int getCount() {
-        	Log.d("Chats", "getCount()="+String.valueOf(MasterArray.joinedChannelSize()));
+        	//Log.d("Chats", "getCount()="+String.valueOf(MasterArray.joinedChannelSize()));
             return MasterArray.joinedChannelSize();
         }
 

@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name">libreChat</string>
-    <string name="chats">Channels</string>
+    <string name="chats">Groups</string>
     
     <string name="splash_line_1">LibreChat</string>
     <string name="splash_line_2">An IRC-based chat client</string>
@@ -21,6 +21,9 @@
     
     <string name="status_channel_downloading">Downloading groups (%1$s) </string>
     <string name="status_channel_downloaded">Downloaded %1$s groups</string>
+    <string name="status_joined_to_channel">Joined to group</string>
+    <string name="status_users_on_channel">Users on group</string>
+    
     
     <string name="tab_list_error_join_first_title">ERROR</string>
     <string name="tab_list_error_join_first">Please, join a channel first</string>
@@ -61,7 +64,7 @@
     
     <string name="chat_popupmenu_btDCC">Send file</string>
     <string name="chat_popupmenu_btWho">Who</string>
-    <string name="chat_popupmenu_btList">List</string>
+    <string name="chat_popupmenu_btList">Gouplist</string>
     <string name="chat_popupmenu_btVoice">Voice</string>
 
 </resources>

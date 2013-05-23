@@ -98,12 +98,12 @@ public class ChatFragment extends ListFragment {
         llStatusMessage = (LinearLayout) rootView.findViewById(R.id.llStatusMessage);
         tvStatusMessage = (TextView) rootView.findViewById(R.id.tvStatusMessage);
         btCloseStatusMessage = (Button) rootView.findViewById(R.id.btCloseStatusMessage);
-        llStatusMessage.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 0));  // Do not use llStatusMessage.setVisibility(View.GONE); 
+        llStatusMessage.setVisibility(View.GONE); //llStatusMessage.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 0));   
         
 
 		llAdv = (LinearLayout) rootView.findViewById (R.id.lladv);
 		adView = (AdView) rootView.findViewById(R.id.adView);
-		llAdv.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 0));  // Do not use llStatusMessage.setVisibility(View.GONE);
+		llAdv.setVisibility(View.GONE); //llAdv.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 0));  
 		
 		Bundle args = getArguments();
         final EditText etUserText = (EditText) rootView.findViewById(R.id.etUserText);
@@ -133,7 +133,7 @@ public class ChatFragment extends ListFragment {
         	@Override
         	public void onClick(View v) {
 
-        		llStatusMessage.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 0)); //Do not use llStatusMessage.setVisibility(View.GONE);
+        		llStatusMessage.setVisibility(View.GONE); //llStatusMessage.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 0));
         		server.setStatusMessage("");
         	}
         });
@@ -202,13 +202,10 @@ public class ChatFragment extends ListFragment {
         			}
         		});
 
-
-        		
-        	
-        	if (llPopupMenu.getVisibility() != View.VISIBLE) 
-        		llPopupMenu.setVisibility(View.VISIBLE);
-        	else 
-        		llPopupMenu.setVisibility(View.GONE);
+        		if (llPopupMenu.getVisibility() != View.VISIBLE) 
+        			llPopupMenu.setVisibility(View.VISIBLE);
+        		else 
+        			llPopupMenu.setVisibility(View.GONE);
         	
 //				if (mIService != null) {
 //	        		
@@ -218,14 +215,7 @@ public class ChatFragment extends ListFragment {
 			}
 		});
         
-        
-        
-        
-       
-        
-       
-        
-        
+         
         /* Listener for EditText (if Enter pressed)  */
         TextView.OnEditorActionListener exampleListener = 
     			new TextView.OnEditorActionListener(){
@@ -236,14 +226,19 @@ public class ChatFragment extends ListFragment {
     					//server.sync
     					String channelName = MasterArray.findChannelNameByKey(key1);
     					String userInput = ((EditText) v).getText().toString();
-    					if (userInput.startsWith("/")) {
-    						/* Only "/WHO" and "/LIST" are allowed for the time being */
-    						/* TODO: To implement "/QUIT", the fragment should be removed to avoid NullPointerException */
-    						if (((userInput.toUpperCase()).contains("WHO")) || ((userInput.toUpperCase()).contains("LIST"))) 
-    							ConnectionService.sendIRCCommand(server, userInput); 						
-    					} else
-    						ConnectionService.sendIRCChat(server, channelName, userInput);
-    					etUserText.getEditableText().clear(); 
+    					/* If not empty, check if it is a command or a chat message */
+    					if (userInput.compareTo("") != 0) {
+    						if (userInput.startsWith("/")) {
+    							/* Only "/WHO" and "/LIST" are allowed for the time being */
+    							/* TODO: To implement "/QUIT", the fragment should be removed to avoid NullPointerException */
+    							llAdv.setVisibility(View.GONE);
+    							userInput = userInput.toUpperCase();
+    							if ((userInput.contains("WHO")) || (userInput.contains("LIST"))) 
+    								ConnectionService.sendIRCCommand(server, userInput); 						
+    						} else
+    							ConnectionService.sendIRCChat(server, channelName, userInput);
+    						etUserText.getEditableText().clear(); 
+    					}
     				} 
     				return true; 
     				} 
@@ -260,22 +255,28 @@ public class ChatFragment extends ListFragment {
     public void showAd() {
     	
     	/* Shows Ad only if no status message */
-    	if ((llStatusMessage.getMeasuredHeight() == 0)  &&
-    			(llAdv.getMeasuredHeight() == 0)){
+//    	if ((llStatusMessage.getMeasuredHeight() == 0)  &&
+//    			(llAdv.getMeasuredHeight() == 0)){
+    	if ((llStatusMessage.getVisibility() != View.VISIBLE) &&
+    		(llAdv.getVisibility() != View.VISIBLE)) {
 
+    		llAdv.setVisibility(View.VISIBLE);
+    		
     		AdRequest request = new AdRequest();
     		adView.loadAd(request);
     		Log.d(TAG, "Loading Ad");
-    		llAdv.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-    		llStatusMessage.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 10));
+    		  		
+    		//llAdv.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+    		//llStatusMessage.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 10));
     		/* Wait 5 second before making layout invisible */
     		Log.d(TAG, "Removing Ad after 5 seconds");
     		Handler handler = new Handler(); 
     		handler.postDelayed(new MyRunnable(server) { 
     			public void run() {		
 
-    				llAdv.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 0)); 
-    				llStatusMessage.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 0));
+    				llAdv.setVisibility(View.GONE);
+    				//llAdv.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 0)); 
+    				//llStatusMessage.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 0));
 
     			} 
     		}, IRCHelper.TIMER_ACTIVE_AD);
@@ -301,7 +302,8 @@ public class ChatFragment extends ListFragment {
     			(server.getStatus() != Server.CONNECTING) &&
     			(server.getStatusMessage() != null)) {
     		if (server.getStatusMessage().compareTo("") != 0) { 		
-    			llStatusMessage.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+    			//llStatusMessage.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+    			llStatusMessage.setVisibility(View.VISIBLE);
     			tvStatusMessage.setText( server.getStatusMessage() );
     			
     			/* Wait 5 second before making layout invisible */
@@ -310,7 +312,8 @@ public class ChatFragment extends ListFragment {
     				handler.postDelayed(new MyRunnable(server) { 
     					public void run() {
     						
-    						llStatusMessage.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 0));
+    						//llStatusMessage.setLayoutParams(new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 0));
+    						llStatusMessage.setVisibility(View.GONE);
     						server.setStatusMessage("");
     					} 
     				} , IRCHelper.TIMER_STATUS_MESSAGE);

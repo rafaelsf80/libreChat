@@ -2,6 +2,8 @@ package es.rafaelsf80.apps.irccfree.Service;
 
 import java.util.ArrayList;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -9,10 +11,16 @@ import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.IBinder;
 import android.os.Message;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
+import android.text.Html;
 import android.util.Log;
 import android.util.SparseArray;
+import es.rafaelsf80.apps.irccfree.IRCHelper;
 import es.rafaelsf80.apps.irccfree.Main;
 import es.rafaelsf80.apps.irccfree.MyRunnable;
+import es.rafaelsf80.apps.irccfree.R;
+import es.rafaelsf80.apps.irccfree.Chats.Chats;
 import es.rafaelsf80.apps.irccfree.Data.Channel;
 import es.rafaelsf80.apps.irccfree.Data.MasterArray;
 import es.rafaelsf80.apps.irccfree.Data.MyMessage;
@@ -112,11 +120,13 @@ public class ConnectionService extends Service {
 	}
 	
 	public static void regListener (IConnectionService iConnectionService) {
-		mIService = iConnectionService;
+		ConnectionService.mIService = iConnectionService;
 	}
 	
 	public static void unregisterListener () {
+		
 		mIService = null;
+		Log.d("ConnectionService", "mIService " + mIService);
 	}
 	
 	
@@ -143,19 +153,21 @@ public class ConnectionService extends Service {
 					Server server = (Server) msg.obj;
 					//MasterArray.sync(server);
 					
-										
-					if (mIService != null) {
+					Log.d("ConnectionService", "Hola123 " + mIService);					
+					if (ConnectionService.mIService != null) {
 						
 						mIService.updateUI();
 						mIService.updateColors();
 					} else {
-						if (server.getNotification() != 0) {
-							Log.d("ConnectionService", "Notification");
-							showNotification(server, mContext);
+						Log.d("ConnectionService", "Notification: " + server.getNotification());
+						if (server.getNotification() != -1) {
+							Log.d("ConnectionService", "Notification " + mContext);
+							showNotification(server, Main.context);
+							
 						}
 							
 					}
-					server.setNotification(0);
+					
 					
 					/* After  Authentication, send LIST to update channel list */
 					if (server.getStatus() == Server.AUTHENTICATED) {
@@ -273,9 +285,9 @@ public class ConnectionService extends Service {
 	
 	
 	/**
-     * Send IRC chat message 
-     * Note this is typing by the user. OK to be in the service
-     */
+	 * Send IRC chat message 
+	 * Note this is typing by the user. OK to be in the service
+	 */
 	public static void sendIRCChat(Server server, String channelName, String input) {	
 		String ircMessage = null;
 		String textToShow = null;
@@ -288,89 +300,94 @@ public class ConnectionService extends Service {
 		} else { 
 			Log.d("ConnectionService", server.getIp() + " " + server.getNickname());
 			ircMessage = ":"+server.getNickname()+"!~"+server.getNickname()+"@192.168.1.17 PRIVMSG "+ "#ro2" +" :" + input + "\n";
-			
+
 			textToShow = input;
 		}
-		
+
 		/* Sending */
-		
-			if (!ircMessage.startsWith("ERROR")) {
-				server.readyToSend = true;
-				server.setReadyToSendString(ircMessage);
-			}
-		
+		if (!ircMessage.startsWith("ERROR")) {
+			server.readyToSend = true;
+			server.setReadyToSendString(ircMessage);
+		}
+
 		/* Update UI  */
 		Log.d("ConnectionService", textToShow);
-		
+
 		Integer key = MasterArray.findKeyByChannelName(server, channelName);
-		
+
 		SparseArray<Channel> ch = server.getChannelArray();
 		ArrayList<MyMessage> messages = ch.get(key).getMessageArray();
 		Log.i("ConnectionService", "key " + key.toString());
 
-		messages.add(new MyMessage(textToShow, true, false, false)); /* true -> message is mine */
-//		ch.setValueAt(key, messages); /* append new text */
-//		server.setChannelBuffer(sb);
-		
+		messages.add(new MyMessage(textToShow, true, false)); /* true -> message is mine */
+		//		ch.setValueAt(key, messages); /* append new text */
+		//		server.setChannelBuffer(sb);
+
 		MasterArray.sync(server);
 		if (mIService != null)
 			mIService.updateUI();
-}
+	}
 
 	
-	
-		
 	public static void showNotification(Server server, Context context) {
 		
-//		// TODO: EXTRAER NOTIFICATION
-//		
-//		String str = "";
-//		int key = -1;
-//		
-//		if (server.isDccOfferReceived())
-//			str = "DCC received";
-//		else {
-//			
-//			// Get last message. Channel key is on getNotification()
-//			key = server.getNotification();
+		String textToShow = "";
+		int key = -1;
+		
+		if (server.isDccOfferReceived())
+			textToShow = "File request";
+		else {
+			
+			// Get last message. Channel key is on getNotification()
+			key = server.getNotification();		
+			SparseArray<Channel> ch = server.getChannelArray();
+	    	ArrayList<MyMessage> messages = ch.get(key).getMessageArray();
+	    	MyMessage lastMessage = messages.get(messages.size() - 1);
+	    	
+	    	
+			
 //			SparseArray<ArrayList<MyMessage>> sb = server.getChannelBuffer();
 //            ArrayList<MyMessage> messages = sb.get(key);
 //    		
 //            int last_message_index = sb.size(); 
 //			MyMessage lastMessage = messages.get( sb.keyAt(last_message_index) ); 
-//			str = lastMessage.toString(); 
-//		}
-//		
-//		NotificationCompat.Builder mBuilder =
-//		        new NotificationCompat.Builder(context)
-//		        .setSmallIcon(R.drawable.icon)
-//		        .setContentTitle("My notification")
-//		        .setContentText(str);
-//		// Creates an explicit intent for an Activity in your app
-//		
-//		Intent resultIntent = new Intent(context, Main.class);
-//		resultIntent.putExtra(IRCHelper.NOTIFICATION_IS_DCC, server.isDccOfferReceived() );
-//		resultIntent.putExtra(IRCHelper.NOTIFICATION_CHANNEL_KEY, key);
-//
-//		// The stack builder object will contain an artificial back stack for the
-//		// started Activity.
-//		// This ensures that navigating backward from the Activity leads out of
-//		// your application to the Home screen.
-//		TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-//		// Adds the back stack for the Intent (but not the Intent itself)
-//		stackBuilder.addParentStack(Chats.class);
-//		// Adds the Intent that starts the Activity to the top of the stack
-//		stackBuilder.addNextIntent(resultIntent);
-//		PendingIntent resultPendingIntent =
-//		        stackBuilder.getPendingIntent(
-//		            0,
-//		            PendingIntent.FLAG_UPDATE_CURRENT
-//		        );
-//		mBuilder.setContentIntent(resultPendingIntent);
-//		NotificationManager mNotificationManager =
-//		    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-//		// mId allows you to update the notification later on.
-//		mNotificationManager.notify( IRCHelper.NOTIFICATION_ID, mBuilder.build() );
+			textToShow = lastMessage.getMessage(); 
+		}
+		
+		NotificationCompat.Builder mBuilder =
+		        new NotificationCompat.Builder(context)
+		        .setSmallIcon(R.drawable.ic_librechat)
+		        .setContentTitle("libreChat")
+		        .setContentText(Html.fromHtml(textToShow));
+
+		// Creates an explicit intent for an Activity in your app
+		Intent resultIntent = new Intent(context, Main.class);
+		resultIntent.putExtra(IRCHelper.NOTIFICATION_CHANNEL_KEY, server.getNotification());
+		resultIntent.putExtra(IRCHelper.NOTIFICATION_IS_DCC, server.isDccOfferReceived() );
+		
+
+		// The stack builder object will contain an artificial back stack for the
+		// started Activity.
+		// This ensures that navigating backward from the Activity leads out of
+		// your application to the Home screen.
+		TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+		// Adds the back stack for the Intent (but not the Intent itself)
+		stackBuilder.addParentStack(Chats.class);
+		// Adds the Intent that starts the Activity to the top of the stack
+		stackBuilder.addNextIntent(resultIntent);
+		PendingIntent resultPendingIntent =
+		        stackBuilder.getPendingIntent(
+		            0,
+		            PendingIntent.FLAG_UPDATE_CURRENT
+		        );
+		mBuilder.setContentIntent(resultPendingIntent);
+		NotificationManager mNotificationManager =
+		    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		// mId allows you to update the notification later on.
+		mNotificationManager.notify( IRCHelper.NOTIFICATION_ID, mBuilder.build() );
+		
+		server.setDccOfferReceived(false);
+		server.setNotification(-1);
 	}
 
 	

@@ -120,8 +120,10 @@ public class MasterArray {
 				if ((server.getStatus() != Server.DISCONNECTED) &&
 						(server.getStatus() != Server.CONNECTING)) {
 					SparseArray<Channel> ch = server.getChannelArray();
+					Log.d("ConnectionService", "size: " + String.valueOf(server.getChannelArray().size()) + " " + server.getChannelArray());
 					for (int j2 = 0; j2 < ch.size(); j2++) {
 						int key = server.getChannelArray().keyAt(j2);
+						Log.d("ConnectionService", "  key: " + String.valueOf(server.getChannelArray().get(key)) + " " +String.valueOf(server.getChannelArray().get(key).isJoined()));
 						if (server.getChannelArray().get(key).isJoined() == true)
 							num++;
 					}
@@ -226,7 +228,7 @@ public class MasterArray {
 					joined = 0;
 					all = 0;
 					while(joined<=position) {
-						Log.d("ConnectionService", "findJoinedChannelNameByPosition position=" + String.valueOf(position) + " " + server.getChannelArray().get(all).getName());
+						//Log.d("ConnectionService", "findJoinedChannelNameByPosition position=" + String.valueOf(position) + " " + server.getChannelArray().get(all).getName());
 						
 						if (server.getChannelArray().get(all).isJoined())
 							joined++;
@@ -238,7 +240,7 @@ public class MasterArray {
 		return -1;
 	}
 	
-	public static int KeyToPosition(int key) {
+	public static int keyToPosition(int key) {
 
 		Server server = null;
 		int joined = 0;		
@@ -247,7 +249,9 @@ public class MasterArray {
 				server = mArray.get(i).get(j);
 				if ((server.getStatus() != Server.DISCONNECTED) &&
 						(server.getStatus() != Server.CONNECTING)) {
+					//Log.d("MasterArray", "Entro: "+server.getIp());
 					for (int index = 0; index < server.getChannelArray().size(); index++) {
+						//Log.d("MasterArray", "index: "+String.valueOf(index) + String.valueOf(server.getChannelArray().keyAt(index)));
 						 if (server.getChannelArray().keyAt(index) == key)
 							 return joined;
 						 else
@@ -361,193 +365,192 @@ public class MasterArray {
 
 	/* Set default data in the Master array */
 	public static void setData() {
-    	
-   	 
-	 int newKey = 0;
-	  mArray.clear();
-   	 
-   	 // Group 1
-   	 //ArrayList<Server> mSecondaryArray1 = new ArrayList<Server>();
-   	 //mSecondaryArray1.clear();
-   	 
-   	 
-   	 Server server1 = new Server();
-   	 server1.setConnectOnLaunch(false);
-   	 server1.setName("Random EU server");
-   	 server1.setGroup("Freenode");
-   	 server1.setIp("chat.eu.freenode.net");
-   	 server1.setPort(6667);
-   	 server1.setNickname("yonaru");
-   	 SparseArray<Channel> ch1 = new SparseArray<Channel>();
-   	 server1.setChannelArray(ch1);
-   	 server1.setStatus(Server.DISCONNECTED);
-   	 server1.setStatusMessage("");
-   	 
-   	 addNewServer(server1);
-   	 
-   	 
-   	 //mSecondaryArray1.add(server1);  
-	 //mArray.add(mSecondaryArray1);
-   	
 
-   	 
-   	 Server server2 = new Server();
-   	server2.setConnectOnLaunch(false);
-   	
- 	 server2.setName("Random server");
-   	 server2.setGroup("Freenode");
-   	 server2.setIp("chat.freenode.net"); 
-   	 
-   	 server2.setPort(6667);
-   	 server2.setNickname("yonaru");
-   	 SparseArray<Channel> ch2 = new SparseArray<Channel>();
-  	 server2.setChannelArray(ch2);
-   	 server2.setStatus(Server.DISCONNECTED);
-   	server2.setStatusMessage("");
-   	 
-	 addNewServer(server2);
-//   	 mSecondaryArray1.add(server2);
-//	 mArray.clear();
-//   	 mArray.add(mSecondaryArray1);
 
-   	 Server server3 = new Server();
-   	server3.setConnectOnLaunch(false);
-   	
-    server3.setName("Random AU server");
-  	 server3.setGroup("Freenode");
-  	 server3.setIp("chat.au.freenode.net"); 
-  	 
+		int newKey = 0;
+		mArray.clear();
 
-   	 server3.setPort(6667);
-   	 server3.setNickname("yonaru");
-   	 
-   	SparseArray<Channel> ch3 = new SparseArray<Channel>();
-  	 server3.setChannelArray(ch3);
-   	
-  	  server3.setStatus(Server.DISCONNECTED);
-  	server3.setStatusMessage("");
-//   	 mSecondaryArray1.add(server3);
-//   	 mArray.clear();
-//  	 mArray.add(mSecondaryArray1);
+		// Group 1
+		//ArrayList<Server> mSecondaryArray1 = new ArrayList<Server>();
+		//mSecondaryArray1.clear();
 
-	 addNewServer(server3);
-   	 
 
-   	 //Group 2
-//   	 ArrayList<Server> mSecondaryArray2 = new ArrayList<Server>();
-//   	 mSecondaryArray2.clear();
+		Server server1 = new Server();
+		server1.setConnectOnLaunch(false);
+		server1.setName("Random EU server");
+		server1.setGroup("Freenode");
+		server1.setIp("chat.eu.freenode.net");
+		server1.setPort(6667);
+		server1.setNickname("yonaru");
+		SparseArray<Channel> ch1 = new SparseArray<Channel>();
+		server1.setChannelArray(ch1);
+		server1.setStatus(Server.DISCONNECTED);
+		server1.setStatusMessage("");
 
-   	 Server server4 = new Server();
-   	server4.setConnectOnLaunch(false);
-   	 server4.setName("Random EU server");
-   	 server4.setGroup("Undernet");
-   	 server4.setIp("eu.undernet.org");
-   	 server4.setPort(6667);
-   	 server4.setNickname("yonaru");
-   	SparseArray<Channel> ch4 = new SparseArray<Channel>();
-  	 server4.setChannelArray(ch4);
-   	 server4.setStatus(Server.DISCONNECTED);
-   	server4.setStatusMessage("");
-   	 //mSecondaryArray2.add(server4);
-   	 
-	 addNewServer(server4);
-//   	 mArray.clear();
-//  	 mArray.add(mSecondaryArray1);
-//  	 mArray.add(mSecondaryArray2);
+		addNewServer(server1);
 
-   	 Server server5 = new Server();
-   	server5.setConnectOnLaunch(false);
-   	 server5.setName("US, FL, Tampa");
-   	 server5.setGroup("Undernet");
-   	 server5.setIp("tampa.fl.us.undernet.org");
-   	 server5.setPort(6667);
-   	 server5.setNickname("yonaru");
-   	SparseArray<Channel> ch5 = new SparseArray<Channel>();
-  	 server5.setChannelArray(ch5);
-   	 server5.setStatus(Server.DISCONNECTED);
-   	server5.setStatusMessage("");
-   	//mSecondaryArray2.add(server5);
-//   	mArray.clear();
-// 	 mArray.add(mSecondaryArray1);
-// 	 mArray.add(mSecondaryArray2);
- 	 
-	 addNewServer(server5);
 
-   	 Server server6 = new Server();
-   	 server6.setConnectOnLaunch(false);
-   	 server6.setName("EU, HU, Budapest");
-   	 server6.setGroup("Undernet");
-   	 server6.setIp("Budapest.HU.EU.UnderNet.org");
-   	 server6.setPort(6667);
-   	 server6.setNickname("yonaru");
-   	SparseArray<Channel> ch6 = new SparseArray<Channel>();
-  	 server6.setChannelArray(ch6);
-   	 server6.setStatus(Server.DISCONNECTED);
-   	server6.setStatusMessage("");
-//   	 mSecondaryArray2.add(server6);
-//   	mArray.clear();
-// 	 mArray.add(mSecondaryArray1);
-// 	 mArray.add(mSecondaryArray2);
-   	 addNewServer(server6);	
-   	 
+		//mSecondaryArray1.add(server1);  
+		//mArray.add(mSecondaryArray1);
 
-   	 //Group 3
-//   	 ArrayList<Server> mSecondaryArray3 = new ArrayList<Server>();
-//   	 mSecondaryArray3.clear();
 
-   	 Server server7 = new Server();
-   	server7.setConnectOnLaunch(false);
-   	 server7.setName("ngIRCd 0.17");
-   	 server7.setGroup("ngIRCd");
-   	 server7.setIp("192.168.1.10");
-   	 server7.setPort(7101);
-   	 server7.setNickname("Yolanda");
-   	SparseArray<Channel> ch7 = new SparseArray<Channel>();
-  	 server7.setChannelArray(ch7);
-  	 server7.setStatus(Server.DISCONNECTED);
-    	server7.setStatusMessage("");
-   	  	 
- 	 addNewServer(server7);
 
-   	 
- 	 Server server8 = new Server();
-    	server8.setConnectOnLaunch(false);
-    	 server8.setName("Random");
-    	 server8.setGroup("Zerofusion");
-    	 server8.setIp("irc.zerofuzion.net");
-    	 server8.setPort(6667);
-    	 server8.setNickname("Yolanda");
-    	SparseArray<Channel> ch8 = new SparseArray<Channel>();
-   	 server8.setChannelArray(ch8);
-   	 server8.setStatus(Server.DISCONNECTED);
-     	server8.setStatusMessage("");
-    	  	 
-  	 addNewServer(server8);
-   	
-   	 
-  	 Server server9 = new Server();
- 	server9.setConnectOnLaunch(false);
- 	 server9.setName("Random EU server");
- 	 server9.setGroup("Gamesurge");
- 	 server9.setIp("irc.eu.gamesurge.net");
- 	 server9.setPort(6667);
- 	 server9.setNickname("Yolanda");
- 	SparseArray<Channel> ch9 = new SparseArray<Channel>();
-	 server9.setChannelArray(ch9);
-	 server9.setStatus(Server.DISCONNECTED);
-  	server9.setStatusMessage("");
- 	  	 
-	 addNewServer(server9);
-   	 
-   	 //mSecondaryArray3.add(server7);
-   	 
-//   	mArray.clear();
-// 	 mArray.add(mSecondaryArray1);
-// 	 mArray.add(mSecondaryArray2);
-//   	 mArray.add(mSecondaryArray3);
+		Server server2 = new Server();
+		server2.setConnectOnLaunch(false);
 
-   	 // mArray.addAll(mArray);
+		server2.setName("Random server");
+		server2.setGroup("Freenode");
+		server2.setIp("chat.freenode.net"); 
 
-   }	
+		server2.setPort(6667);
+		server2.setNickname("yonaru");
+		SparseArray<Channel> ch2 = new SparseArray<Channel>();
+		server2.setChannelArray(ch2);
+		server2.setStatus(Server.DISCONNECTED);
+		server2.setStatusMessage("");
+
+		addNewServer(server2);
+		//   	 mSecondaryArray1.add(server2);
+		//	 mArray.clear();
+		//   	 mArray.add(mSecondaryArray1);
+
+		Server server3 = new Server();
+		server3.setConnectOnLaunch(false);
+
+		server3.setName("Random AU server");
+		server3.setGroup("Freenode");
+		server3.setIp("chat.au.freenode.net"); 
+
+
+		server3.setPort(6667);
+		server3.setNickname("yonaru");
+
+		SparseArray<Channel> ch3 = new SparseArray<Channel>();
+		server3.setChannelArray(ch3);
+
+		server3.setStatus(Server.DISCONNECTED);
+		server3.setStatusMessage("");
+		//   	 mSecondaryArray1.add(server3);
+		//   	 mArray.clear();
+		//  	 mArray.add(mSecondaryArray1);
+
+		addNewServer(server3);
+
+
+		//Group 2
+		//   	 ArrayList<Server> mSecondaryArray2 = new ArrayList<Server>();
+		//   	 mSecondaryArray2.clear();
+
+		Server server4 = new Server();
+		server4.setConnectOnLaunch(false);
+		server4.setName("Random EU server");
+		server4.setGroup("Undernet");
+		server4.setIp("eu.undernet.org");
+		server4.setPort(6667);
+		server4.setNickname("yonaru");
+		SparseArray<Channel> ch4 = new SparseArray<Channel>();
+		server4.setChannelArray(ch4);
+		server4.setStatus(Server.DISCONNECTED);
+		server4.setStatusMessage("");
+		//mSecondaryArray2.add(server4);
+
+		addNewServer(server4);
+		//   	 mArray.clear();
+		//  	 mArray.add(mSecondaryArray1);
+		//  	 mArray.add(mSecondaryArray2);
+
+		Server server5 = new Server();
+		server5.setConnectOnLaunch(false);
+		server5.setName("US, FL, Tampa");
+		server5.setGroup("Undernet");
+		server5.setIp("tampa.fl.us.undernet.org");
+		server5.setPort(6667);
+		server5.setNickname("yonaru");
+		SparseArray<Channel> ch5 = new SparseArray<Channel>();
+		server5.setChannelArray(ch5);
+		server5.setStatus(Server.DISCONNECTED);
+		server5.setStatusMessage("");
+		//mSecondaryArray2.add(server5);
+		//   	mArray.clear();
+		// 	 mArray.add(mSecondaryArray1);
+		// 	 mArray.add(mSecondaryArray2);
+
+		addNewServer(server5);
+
+		Server server6 = new Server();
+		server6.setConnectOnLaunch(false);
+		server6.setName("EU, HU, Budapest");
+		server6.setGroup("Undernet");
+		server6.setIp("Budapest.HU.EU.UnderNet.org");
+		server6.setPort(6667);
+		server6.setNickname("yonaru");
+		SparseArray<Channel> ch6 = new SparseArray<Channel>();
+		server6.setChannelArray(ch6);
+		server6.setStatus(Server.DISCONNECTED);
+		server6.setStatusMessage("");
+		//   	 mSecondaryArray2.add(server6);
+		//   	mArray.clear();
+		// 	 mArray.add(mSecondaryArray1);
+		// 	 mArray.add(mSecondaryArray2);
+		addNewServer(server6);	
+
+
+		//Group 3
+		//   	 ArrayList<Server> mSecondaryArray3 = new ArrayList<Server>();
+		//   	 mSecondaryArray3.clear();
+
+		Server server7 = new Server();
+		server7.setConnectOnLaunch(false);
+		server7.setName("ngIRCd 0.17");
+		server7.setGroup("ngIRCd");
+		server7.setIp("192.168.1.10");
+		server7.setPort(7101);
+		server7.setNickname("Yolanda");
+		SparseArray<Channel> ch7 = new SparseArray<Channel>();
+		server7.setChannelArray(ch7);
+		server7.setStatus(Server.DISCONNECTED);
+		server7.setStatusMessage("");
+
+		addNewServer(server7);
+
+
+		Server server8 = new Server();
+		server8.setConnectOnLaunch(false);
+		server8.setName("Random");
+		server8.setGroup("Zerofusion");
+		server8.setIp("irc.zerofuzion.net");
+		server8.setPort(6667);
+		server8.setNickname("Yolanda");
+		SparseArray<Channel> ch8 = new SparseArray<Channel>();
+		server8.setChannelArray(ch8);
+		server8.setStatus(Server.DISCONNECTED);
+		server8.setStatusMessage("");
+
+		addNewServer(server8);
+
+		Server server9 = new Server();
+		server9.setConnectOnLaunch(false);
+		server9.setName("Random EU server");
+		server9.setGroup("Gamesurge");
+		server9.setIp("irc.eu.gamesurge.net");
+		server9.setPort(6667);
+		server9.setNickname("Yolanda");
+		SparseArray<Channel> ch9 = new SparseArray<Channel>();
+		server9.setChannelArray(ch9);
+		server9.setStatus(Server.DISCONNECTED);
+		server9.setStatusMessage("");
+
+		addNewServer(server9);
+
+		//mSecondaryArray3.add(server7);
+
+		//   	mArray.clear();
+		// 	 mArray.add(mSecondaryArray1);
+		// 	 mArray.add(mSecondaryArray2);
+		//   	 mArray.add(mSecondaryArray3);
+
+		// mArray.addAll(mArray);
+
+	}	
 
 }

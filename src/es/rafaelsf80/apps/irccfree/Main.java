@@ -1,7 +1,5 @@
 package es.rafaelsf80.apps.irccfree;
 
-
-
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.app.NotificationManager;
@@ -48,28 +46,34 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.main);
+		
+		Log.d(TAG, "onCreate()");
 
 		context = this;
 
-		Intent in = new Intent(this, ConnectionService.class);
-		startService(in);
-
+		/* Notification or splash */
 		Intent intent = getIntent();
-
 		if (intent != null) {
+			Log.d(TAG, "onCreate() - Notification or Splash");
 			int key = intent.getIntExtra(IRCHelper.NOTIFICATION_CHANNEL_KEY, -1);
 			boolean is_dcc = intent.getBooleanExtra(IRCHelper.NOTIFICATION_IS_DCC, false);
+			
+			/* It's notification */
 			if (key != -1) {
 				NotificationManager mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 				mNM.cancel(IRCHelper.NOTIFICATION_ID);
 
-				// Show fragment
+				/* Show fragment */
 				if (MasterArray.joinedChannelSize() > 0) {
 					Intent i = new Intent(this, Chats.class);
-					i.putExtra(IRCHelper.NOTIFICATION_FRAGMENT_KEY, key);
+					i.putExtra(IRCHelper.NOTIFICATION_CHANNEL_KEY, key);
+					i.putExtra(IRCHelper.NOTIFICATION_IS_DCC, is_dcc);
 					startActivity(i);
 				}
-
+			} else {
+				/* It's splash screen */
+				Intent in = new Intent(this, ConnectionService.class);
+				startService(in);
 			}
 		}
 
@@ -100,11 +104,9 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
 	protected void onResume() {
 
 		super.onResume();
-		Log.d(TAG, "onResume");
+		Log.d(TAG, "onResume()");
 
 		ConnectionService.regListener(new IConnectionService() {
-
-
 
 			Fragment fragConnect = mAppSectionsPagerAdapter.getItem(0); // En TabConnect es donde están los colores
 			Fragment fragList = mAppSectionsPagerAdapter.getItem(1); // En TabList hay que actualizar lista es donde están los colores
@@ -182,7 +184,7 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
 
 	@Override
 	public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-		Log.d(TAG, String.valueOf(tab.getPosition()));
+		Log.d(TAG, "Tab selected: " + String.valueOf(tab.getPosition()));
 
 		mViewPager.setCurrentItem(tab.getPosition());
 
@@ -244,12 +246,11 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
 	protected void onPause() {
 
 		super.onPause();
-		Log.d(TAG, "onPause");
+		Log.d(TAG, "onPause()");
 
 		TabConnect.unregisterListener();
 		TabConnectAdapter.unregisterListener();
 		ConnectionService.unregisterListener();
-
 	}
 
 
@@ -257,6 +258,7 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
 	protected void onDestroy() {
 
 		super.onDestroy();
+		Log.d(TAG, "onDestroy()");
 		stopService(new Intent(getApplicationContext(), ConnectionService.class));
 	}
 
@@ -315,13 +317,10 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
 		public CharSequence getPageTitle(int position) {
 			switch (position) {
 			case 0:
-				//return "/connect";
 				return getString(R.string.tab_title_0);
 			case 1:
-				//return "/list";
 				return getString(R.string.tab_title_1);
 			case 2:
-				//return "Options";
 				return getString(R.string.tab_title_2);
 			}
 			return null;

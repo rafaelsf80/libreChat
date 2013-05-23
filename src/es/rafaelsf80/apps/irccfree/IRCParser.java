@@ -142,16 +142,17 @@ public class IRCParser {
 			/* remove \r|\n */
 			tokens[i] = tokens[i].replaceAll("(\r|\n)", "");
 			if ((index = tokens[i].indexOf(" 353 ")) > 0)  // Find RPL_NAME 353
-				return tokens[i].substring(index+9 + mNickName.length() + getChannelName().length());
+				return tokens[i].substring(index+10 + mNickName.length() + getChannelName().length());
 		}
 		return null;
 	}
 	
 	/* Response to WHO:
-    :group101.ro2.uc3m.irc.net 352 Yolanda * ~rafa Yolanda-VAIO group101.ro2.uc3m.irc.net Yolanda H :0 Rafa
-	   :group101.ro2.uc3m.irc.net 315 Yolanda * :End of WHO list*/
+	 :group101.ro2.uc3m.irc.net 352 Yolanda * ~rafa Yolanda-VAIO group101.ro2.uc3m.irc.net rafa H :0 ...
+     :group101.ro2.uc3m.irc.net 352 Yolanda * ~Yolanda Yolanda-VAIO group101.ro2.uc3m.irc.net Yolanda H :0 Yolanda
+     :group101.ro2.uc3m.irc.net 315 Yolanda * :End of WHO list*/
 	/* RPL_WHOREPLAY 352  "<channel> <user> <host> <server> <nick>  <H|G>[*][@|+] :<hopcount> <real name>" */
-	public String getWho() {
+	public String getWho(String nickName) {
 		
 		String name = "";
 		String [] tokens = mIrcMessage.split("[\\n]");
@@ -160,10 +161,12 @@ public class IRCParser {
 			int index;
 			/* remove \r|\n */
 			tokens[i] = tokens[i].replaceAll("(\r|\n)", "");
-			if ((index = tokens[i].indexOf("352")) > 0) {  // Find RPL_TOPIC 352
-				//name = tokens[i].substring(index+7 + mNickName.length());
+			if ((index = tokens[i].indexOf(" 352 ")) > 0) {  // Find RPL_TOPIC 352
+				/* split words starting at tokens[i].substring(index+7) */
+				String [] words = (tokens[i].substring(index+7 + nickName.length())).split(" ");
+				String nick = words[4];
 				String lastWord = tokens[i].substring(tokens[i].lastIndexOf(" ")+1);
-				name += lastWord + ", ";
+				name += nick + ", ";
 			}	
 		}
 		/* Removes last ", " */

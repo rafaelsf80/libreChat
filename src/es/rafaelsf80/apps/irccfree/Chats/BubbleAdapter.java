@@ -161,7 +161,7 @@ public class BubbleAdapter extends BaseAdapter{
 			//holder.message.setText(message.getMessage());
 			LayoutParams lp = (LayoutParams) holder.message.getLayoutParams();
 			//check if it is a status message then remove background, and change text color.
-			if(message.isStatusMessage())
+			if(message.isDcc())
 			{
 				holder.message.setBackgroundDrawable(null);
 				lp.gravity = Gravity.LEFT;
@@ -187,8 +187,7 @@ public class BubbleAdapter extends BaseAdapter{
 		}
 		return convertView;
 	}
-	private  class ViewHolder
-	{
+	private  class ViewHolder {
 
 		LinearLayout lladv; 
 		TextView message;
