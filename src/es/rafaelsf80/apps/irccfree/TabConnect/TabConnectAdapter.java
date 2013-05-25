@@ -105,7 +105,7 @@ public class TabConnectAdapter extends BaseExpandableListAdapter {
         tvStatus = (TextView) convertView.findViewById(R.id.tvStatus);
         
         tv = (TextView) convertView.findViewById(R.id.tvChild);
-        tv.setText("   " + server.getName() + " " + server.getStatus());
+        tv.setText("   " + server.getName());// + " " + server.getStatus());
         
         sw = (Switch) convertView.findViewById(R.id.switch1); 
         if (server.getStatus() == Server.DISCONNECTED) {
